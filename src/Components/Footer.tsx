@@ -26,10 +26,10 @@ export default function Footer() {
   
             {/* Enlaces de navegación */}
             <div className="flex space-y-0 space-x-6 flex-row">
-              <a href="#home" className="hover:underline text-sm font-poppins">
+              <a href="/" className="hover:underline text-sm font-poppins">
                 Inicio
               </a>
-              <a href="#services" className="hover:underline text-sm font-poppins">
+              <a href="/servicios" className="hover:underline text-sm font-poppins">
                 Servicios
               </a>
               <a href="https://www.instagram.com/lugonzalezbeauty___/"             

@@ -17,21 +17,21 @@ const Header: React.FC = () => {
 
         {/* Navigation Links (Desktop version) */}
         <nav className="hidden md:flex space-x-6">
-          <a href="#services" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
-            Servicios
+          <a href="/" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
+            Inicio
           </a>
           <a href="/agenda" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
             Agendar
           </a>
-          <a href="#contact" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
-            Contacto
+          <a href="/servicios" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
+            Servicios
           </a>
         </nav>
 
         {/* Action Button (Desktop version) */}
         <div className="max-2xl:hidden">
           <a
-            href="#quote"
+            href="/cotizar"
             className="bg-white text-pink-500 font-semibold py-2 px-4 rounded-lg hover:bg-pink-100 transition font-poppins"
           >
             Cotizar ahora
@@ -74,8 +74,8 @@ const Header: React.FC = () => {
             <nav className="flex flex-col space-y-6 mt-12">
               <a href="/" className="text-white font-poppins hover:text-pink-300 text-lg">Inicio</a>
               <a href="/agenda" className="text-white font-poppins hover:text-pink-300 text-lg">Agendar</a>
-              <a href="/#servicios" className="text-white font-poppins hover:text-pink-300 text-lg">Servicios</a>
-              <a href="/cost" className="text-white font-poppins hover:text-pink-300 text-lg">Cotizar</a>
+              <a href="/servicios" className="text-white font-poppins hover:text-pink-300 text-lg">Servicios</a>
+              <a href="/cotizar" className="text-white font-poppins hover:text-pink-300 text-lg">Cotizar</a>
             </nav>
           </div>
         </div>

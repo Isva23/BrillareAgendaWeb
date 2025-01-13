@@ -7,14 +7,13 @@ import Services from "../Components/Services";
 import Paquetes from "../Components/Paquetes";
 import Promos from "../Components/Promos";
 import Footer from "../Components/Footer";
+import LoadingModal from "../Components/LoadingModal";
 
 const Home = () => {
   const { data: service, isLoading, error } = useFirestoreServicesCollection('services');
   const [serviciosUser, setServiciosUser] = useState<ServicesType[]>([]);
   const [paquetes, setPaquetes] = useState<ServicesType[]>([]);
   const [promos, setPromos] = useState<ServicesType[]>([]);
-
-  if (error) return <p>Error al cargar servicios: {error.message}</p>;
 
   useEffect(() => {
     const servicios: ServicesType[] = [];
@@ -40,6 +39,9 @@ const Home = () => {
     setPromos(promosTemp);
   }, [service]);
 
+  if (isLoading) return <LoadingModal isOpen={isLoading}/>
+  if (error) return <p>Error al cargar servicios: {error.message}</p>;
+  
   return (
     <>
       <Header />

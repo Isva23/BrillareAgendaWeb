@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Estilos del calendario
 import "../styles/calendar.css"; // Personalización con Tailwind
+import LoadingModal from "./LoadingModal";
 
 export default function Calendario() {
   const { addAppointment, getAppointmentsByDate } = useAgenda();
@@ -14,25 +15,23 @@ export default function Calendario() {
   const [time, setTime] = useState("");
   const [disabledTimes, setDisabledTimes] = useState<string[]>([]);
   const [disabledDates, setDisabledDates] = useState<Date[]>([]);
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para el modal de carga
 
-  const availableTimes = ["02:00 PM", "05:00 PM", "08:00 PM"]; // Intervalos de 2 horas
+  const availableTimes = ["02:00 PM", "05:00 PM", "08:00 PM"];
   const availableTimesSaturday = ["09:00 AM", "12:00 PM", "03:00 PM", "06:00 PM"];
 
   const today = new Date();
   const twoMonthsFromNow = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
 
-  // Validar citas ocupadas al seleccionar una fecha
   useEffect(() => {
     const fetchAppointments = async () => {
       if (date) {
         const formattedDate = date.toISOString().split("T")[0];
         const appointments = await getAppointmentsByDate(formattedDate);
 
-        // Bloquear horarios ya ocupados
         const occupiedTimes = appointments.map((appointment) => appointment.time);
         setDisabledTimes(occupiedTimes);
 
-        // Bloquear el día completo si todos los horarios están ocupados
         if (occupiedTimes.length === availableTimes.length) {
           setDisabledDates((prev) => [...prev, date]);
         }
@@ -44,7 +43,6 @@ export default function Calendario() {
     }
   }, [date]);
 
-  // Validar días bloqueados (domingos y días sin disponibilidad)
   const isDateDisabled = ({ date }: { date: Date }) => {
     const day = date.getDay();
     const formattedDate = date.toISOString().split("T")[0];
@@ -62,14 +60,17 @@ export default function Calendario() {
       return;
     }
 
+    setIsLoading(true); // Mostrar el modal de carga
+
     const formattedDate = date.toISOString().split("T")[0];
     const appointment = { name, email, date: formattedDate, time };
 
-    // Guardar cita y enviar correo
     const result = await addAppointment(appointment);
 
+    setIsLoading(false); // Ocultar el modal de carga
+
     if (result.success) {
-      Swal.fire("Éxito", "La cita se registró correctamente", "success");
+      Swal.fire("Éxito", "La cita se registró correctamente, se envió un correo con sus datos", "success");
       setName("");
       setEmail("");
       setDate(null);
@@ -83,20 +84,17 @@ export default function Calendario() {
     <section className="max-w-4xl mx-auto mt-[64px] p-6 bg-pink-100 rounded-lg shadow-lg h-screen md:h-screen">
       <h1 className="text-3xl font-bold text-center text-pink-500 mb-6 font-poppins">Agendar Cita</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Calendario */}
         <div>
           <h2 className="text-xl font-semibold text-pink-500 mb-4 font-poppins">Selecciona una fecha:</h2>
           <Calendar
             onChange={setDate}
             value={date}
             tileDisabled={isDateDisabled}
-            minDate={today} // Fecha mínima: hoy
-            maxDate={twoMonthsFromNow} // Fecha máxima: dos meses desde hoy
+            minDate={today}
+            maxDate={twoMonthsFromNow}
             className="react-calendar"
           />
         </div>
-
-        {/* Formulario */}
         <div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -148,6 +146,7 @@ export default function Calendario() {
           </form>
         </div>
       </div>
+      <LoadingModal isOpen={isLoading}/>
     </section>
   );
 }

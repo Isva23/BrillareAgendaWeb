@@ -35,7 +35,9 @@ export const useAgenda = () => {
           to_name: cita.name, // Nombre del usuario
           date: cita.date, // Fecha de la cita
           time: cita.time, // Hora de la cita
-          email: cita.email
+          email: cita.email,
+          action: 'agendada',
+          contact_url : 'https://www.instagram.com/lugonzalezbeauty___/'
         },
         userId
       );
@@ -54,7 +56,8 @@ export const useAgenda = () => {
           from_email: cita.email, // Email del usuario que agenda
           date: cita.date, // Fecha de la cita
           time: cita.time, // Hora de la cita
-          email: 'lupi7968@gmail.com', // Correo del cliente
+          email: 'lupi7968@gmail.com', // Correo del cliente,
+          action : 'agendada' //accion de la cita
         },
         userId
       );
