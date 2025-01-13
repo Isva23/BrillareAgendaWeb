@@ -28,7 +28,7 @@ export default function CarrouselNow() {
   }
 
   return (
-    <div className="h-auto w-full relative">
+    <div className="h-auto w-full relative mt-[64px]" id='home'>
       {/* Imágenes del carrusel */}
       <div className="h-full w-full overflow-hidden">
         {images.map((image, index) => (
@@ -36,7 +36,7 @@ export default function CarrouselNow() {
             key={image.id}
             src={image.imageBase64}
             alt={`Slide ${index + 1}`}
-            className={`object-fill w-full h-[250px] md:h-[500px] transition-opacity duration-700 ${
+            className={`object-cover w-full h-[250px] md:h-[500px] transition-opacity duration-700 ${
               index === currentIndex ? 'opacity-100' : 'opacity-0 absolute top-0'
             }`}
           />

@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import uñasPromo from '../assets/ImagesHomes/uñasPromo1.jpg';
-import uñasPromo2 from '../assets/ImagesHomes/uñasPromo2.jpg';
-import uñasPromo3 from '../assets/ImagesHomes/uñasPromo3.avif';
+import { ServicesType } from '../types/mainTypes';
 
-export default function Paquetes() {
-  const paquetesPromos = [
-    { title: 'Paquete 1', price: '$200', description: 'GEL SEMIPERMANENTE', img: `${uñasPromo}` },
-    { title: 'Paquete 2', price: '$400', description: 'UÑAS DEL 1 AL 3 CON DISEÑO SENCILLO', img: `${uñasPromo2}` },
-    { title: 'Paquete 3', price: '$550', description: 'UÑAS DEL 1 AL 3 CON DISEÑO A ELEGIR', img: `${uñasPromo3}` },
-  ];
+interface PaquetesProps {
+  data : ServicesType[]
+}
+
+export default function Paquetes({data}:PaquetesProps) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -17,11 +14,11 @@ export default function Paquetes() {
   // Cambio automático de diapositivas cada 3 segundos
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % paquetesPromos.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length);
     }, 3000);
 
     return () => clearInterval(interval); // Limpieza del intervalo
-  }, [paquetesPromos.length]);
+  }, [data.length]);
 
   return (
     <section className='bg-white w-[90%] mx-auto mt-[70px] mb-[100px] md:w-8/12'>
@@ -34,25 +31,25 @@ export default function Paquetes() {
           className='flex transition-transform duration-500'
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {paquetesPromos.map((item, index) => (
+          {data.map((item, index) => (
             <div
               key={index}
               className='w-full flex-shrink-0 p-2'
             >
               <div className='relative group'>
                 <img
-                  src={item.img}
-                  alt={item.img}
-                  className='h-[400px] w-full object-cover rounded-md'
+                  src={item.imageBase64}
+                  alt={item.name}
+                  className='h-[600px] w-full object-cover rounded-md'
                 />
                 {/* Contenedor del texto */}
-                <div className='absolute bottom-0 left-0 right-0 backdrop-blur-sm bg-pink-300 bg-opacity-60 p-5 text-center transition-opacity duration-500 opacity-0 group-hover:opacity-100'>
-                  <p className='font-poppins'>{item.description}</p>
-                  <p className='font-poppins text-white font-medium'>{item.price}</p>
+                <div className='absolute rounded-md bottom-0 left-0 right-0 backdrop-blur-sm bg-pink-300 bg-opacity-70 p-20 text-center transition-opacity duration-500 opacity-0 group-hover:opacity-100'>
+                  <p className='font-poppins text-xl text-white'>{item.description}</p>
+                  <p className='font-poppins text-white font-bold text-2xl mt-3'>${item.price}</p>
                 </div>
                 {/* Nombre del paquete (siempre visible) */}
-                <h3 className='absolute bottom-5 left-0 right-0 text-black font-poppins text-lg font-medium group-hover:opacity-0 transition-opacity duration-500'>
-                  {item.title}
+                <h3 className='absolute bg-pink-300 rounded-md bg-opacity-70 py-10 bottom-0 md:bottom-[0.5px]  text-center left-0 right-0 text-white font-poppins text-2xl font-medium group-hover:opacity-0 transition-opacity duration-500'>
+                  {item.name}
                 </h3>
               </div>
             </div>
@@ -61,7 +58,7 @@ export default function Paquetes() {
 
         {/* Indicadores de página */}
         <div className='left-0 right-0 flex justify-center space-x-2'>
-          {paquetesPromos.map((_, index) => (
+          {data.map((_, index) => (
             <div
               key={index}
               onClick={() => setCurrentIndex(index)}

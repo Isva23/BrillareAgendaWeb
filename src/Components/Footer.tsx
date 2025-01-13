@@ -18,24 +18,24 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
             {/* Descripción */}
             <div className="mb-6 md:mb-0">
-              <h1 className="text-2xl font-bold font-poppins">Estilo Perfecto</h1>
+              <h1 className="text-2xl font-poppins text-center md:text-start">LuBeauty</h1>
               <p className="mt-2 text-sm">
                 Tu lugar ideal para servicios de estilismo, diseño de cejas y manicure.
               </p>
             </div>
   
             {/* Enlaces de navegación */}
-            <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
+            <div className="flex space-y-0 space-x-6 flex-row">
               <a href="#home" className="hover:underline text-sm font-poppins">
                 Inicio
               </a>
               <a href="#services" className="hover:underline text-sm font-poppins">
                 Servicios
               </a>
-              <a href="#about" className="hover:underline text-sm font-poppins">
-                Nosotros
-              </a>
-              <a href="#contact" className="hover:underline text-sm font-poppins">
+              <a href="https://www.instagram.com/lugonzalezbeauty___/"             
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline text-sm font-poppins">
                 Contacto
               </a>
             </div>

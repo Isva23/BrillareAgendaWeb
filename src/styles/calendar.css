@@ -1,0 +1,19 @@
+/* Cambiar el fondo y el color del texto del calendario */
+.react-calendar {
+    background-color: white; /* Fondo del calendario */
+  }
+  
+  /* Estilo para los días seleccionados */
+  .react-calendar__tile--active {
+    background-color: #ec4899; /* Verde para el día seleccionado */
+    color: white;
+  }
+
+  /* Cambiar el fondo y color de los días deshabilitados */
+.react-calendar__tile--disabled {
+    background-color: pink; /* Fondo gris claro */
+    color: #b0b0b0; /* Texto gris */
+    cursor: not-allowed; /* Cursor deshabilitado */
+    opacity: 0.7;
+  }
+

@@ -9,3 +9,11 @@ export interface ServicesType{
     name : string
     price : number
 }
+
+// Citas type 
+export interface Appointment {
+    name: string;
+    email: string;
+    date: string;
+    time: string;
+  }
