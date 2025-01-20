@@ -16,4 +16,5 @@ export interface Appointment {
     email: string;
     date: string;
     time: string;
+    service : string;
   }

@@ -37,7 +37,8 @@ export const useAgenda = () => {
           time: cita.time, // Hora de la cita
           email: cita.email,
           action: 'agendada',
-          contact_url : 'https://www.instagram.com/lugonzalezbeauty___/'
+          contact_url : 'https://www.instagram.com/lugonzalezbeauty___/',
+          service : cita.service,
         },
         userId
       );
@@ -57,7 +58,8 @@ export const useAgenda = () => {
           date: cita.date, // Fecha de la cita
           time: cita.time, // Hora de la cita
           email: 'lupi7968@gmail.com', // Correo del cliente,
-          action : 'agendada' //accion de la cita
+          action : 'agendada', //accion de la cita
+          service : cita.service
         },
         userId
       );

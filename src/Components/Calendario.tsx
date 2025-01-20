@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useAgenda } from "../hooks/useAgenda";
 import Swal from "sweetalert2";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // Estilos del calendario
-import "../styles/calendar.css"; // Personalización con Tailwind
+import "react-calendar/dist/Calendar.css";
+import "../styles/calendar.css";
 import LoadingModal from "./LoadingModal";
+import { useFirestoreServicesCollection } from "../hooks/useFirestoreServices";
+import { ServicesType } from "../types/mainTypes";
 
 export default function Calendario() {
   const { addAppointment, getAppointmentsByDate } = useAgenda();
+  const { data: services, isLoading: loadingServices } = useFirestoreServicesCollection("services");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,7 +18,8 @@ export default function Calendario() {
   const [time, setTime] = useState("");
   const [disabledTimes, setDisabledTimes] = useState<string[]>([]);
   const [disabledDates, setDisabledDates] = useState<Date[]>([]);
-  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para el modal de carga
+  const [selectedService, setSelectedService] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const availableTimes = ["02:00 PM", "05:00 PM", "08:00 PM"];
   const availableTimesSaturday = ["09:00 AM", "12:00 PM", "03:00 PM", "06:00 PM"];
@@ -28,7 +32,6 @@ export default function Calendario() {
       if (date) {
         const formattedDate = date.toISOString().split("T")[0];
         const appointments = await getAppointmentsByDate(formattedDate);
-
         const occupiedTimes = appointments.map((appointment) => appointment.time);
         setDisabledTimes(occupiedTimes);
 
@@ -47,27 +50,21 @@ export default function Calendario() {
     const day = date.getDay();
     const formattedDate = date.toISOString().split("T")[0];
     return (
-      day === 0 || // Bloquear domingos
-      disabledDates.some((d) => d.toISOString().split("T")[0] === formattedDate)
+      day === 0 || disabledDates.some((d) => d.toISOString().split("T")[0] === formattedDate)
     );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!name || !email || !date || !time) {
+    if (!name || !email || !date || !time || !selectedService) {
       Swal.fire("Error", "Por favor completa todos los campos", "error");
       return;
     }
-
-    setIsLoading(true); // Mostrar el modal de carga
-
+    setIsLoading(true);
     const formattedDate = date.toISOString().split("T")[0];
-    const appointment = { name, email, date: formattedDate, time };
-
+    const appointment = { name, email, date: formattedDate, time, service: selectedService };
     const result = await addAppointment(appointment);
-
-    setIsLoading(false); // Ocultar el modal de carga
+    setIsLoading(false);
 
     if (result.success) {
       Swal.fire("Éxito", "La cita se registró correctamente, se envió un correo con sus datos", "success");
@@ -75,13 +72,14 @@ export default function Calendario() {
       setEmail("");
       setDate(null);
       setTime("");
+      setSelectedService("");
     } else {
       Swal.fire("Error", result.message || "No se pudo guardar la cita", "error");
     }
   };
 
   return (
-    <section className="max-w-4xl mx-auto mt-[64px] p-6 bg-pink-100 rounded-lg shadow-lg h-screen md:h-screen">
+    <section className="max-w-4xl mx-auto mt-[64px] p-6 bg-pink-100 rounded-lg shadow-lg h-auto md:h-screen">
       <h1 className="text-3xl font-bold text-center text-pink-500 mb-6 font-poppins">Agendar Cita</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -118,11 +116,39 @@ export default function Calendario() {
               />
             </div>
             <div>
+              <label className="block text-pink-700 font-poppins mb-2 max-sm:text-lg">Servicio</label>
+              <select
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+                className="w-full border border-white rounded-md p-2 font-poppins text-sm bg-white h-[50px]"
+                disabled={loadingServices}
+              >
+                <option value="">Selecciona un servicio</option>
+                {Object.entries(
+                  services.reduce((groupedServices, service) => {
+                    if (!groupedServices[service.category]) {
+                      groupedServices[service.category] = [];
+                    }
+                    groupedServices[service.category].push(service);
+                    return groupedServices;
+                  }, {} as Record<string, ServicesType[]>)
+                ).map(([category, servicesInCategory]) => (
+                  <optgroup key={category} label={category} className="font-poppins font-medium">
+                    {servicesInCategory.map((service) => (
+                      <option key={service.id} value={service.name}>
+                        {service.name} - ${service.price}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="block text-pink-700 font-poppins mb-2 max-sm:text-lg">Hora</label>
               <select
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="w-full border border-white rounded-md p-2 font-poppins text-sm bg-white h-[50px]"
+                className="w-full border border-white rounded-md p-2 font-poppins text-sm bg-white h-[50px] mb-3"
               >
                 <option value="">Selecciona una hora</option>
                 {(date && date.getDay() === 6 ? availableTimesSaturday : availableTimes).map((hour) => (
@@ -146,7 +172,7 @@ export default function Calendario() {
           </form>
         </div>
       </div>
-      <LoadingModal isOpen={isLoading}/>
+      <LoadingModal isOpen={isLoading} />
     </section>
   );
 }

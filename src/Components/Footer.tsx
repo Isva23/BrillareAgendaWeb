@@ -1,6 +1,10 @@
 import imageBg from '../assets/ImagesHomes/uñasPromo2.jpg'
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Footer() {
+    const navigate = useNavigate();
+  
     return (
       <footer className="relative bg-pink-400 text-white py-8">
         {/* Fondo difuminado */}
@@ -26,10 +30,10 @@ export default function Footer() {
   
             {/* Enlaces de navegación */}
             <div className="flex space-y-0 space-x-6 flex-row">
-              <a href="/" className="hover:underline text-sm font-poppins">
+              <a onClick={()=> navigate('/')} className="hover:underline text-sm font-poppins cursor-pointer">
                 Inicio
               </a>
-              <a href="/servicios" className="hover:underline text-sm font-poppins">
+              <a onClick={()=> navigate('/servicios')} className="hover:underline text-sm font-poppins cursor-pointer">
                 Servicios
               </a>
               <a href="https://www.instagram.com/lugonzalezbeauty___/"             

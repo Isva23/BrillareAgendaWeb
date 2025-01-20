@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -17,25 +21,29 @@ const Header: React.FC = () => {
 
         {/* Navigation Links (Desktop version) */}
         <nav className="hidden md:flex space-x-6">
-          <a href="/" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
+          <button className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2" onClick={()=> navigate('/')}>
             Inicio
-          </a>
-          <a href="/agenda" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
+          </button>
+          <button
+            onClick={() => navigate('/agenda')}
+            className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
             Agendar
-          </a>
-          <a href="/servicios" className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
+          </button>
+          <button  
+            onClick={() => navigate('/servicios')}
+            className="hover:font-bold hover:border-b-2 hover:border-white transition font-poppins hover:pb-2">
             Servicios
-          </a>
+          </button>
         </nav>
 
         {/* Action Button (Desktop version) */}
         <div className="max-2xl:hidden">
-          <a
-            href="/cotizar"
+          <button
+            onClick={() => navigate("/cotizar")}
             className="bg-white text-pink-500 font-semibold py-2 px-4 rounded-lg hover:bg-pink-100 transition font-poppins"
           >
             Cotizar ahora
-          </a>
+          </button>
         </div>
 
         {/* Mobile Menu Icon */}
@@ -71,11 +79,11 @@ const Header: React.FC = () => {
             <button onClick={toggleMobileMenu} className="text-white text-2xl absolute top-4 right-4">
               &times; {/* Cerrar icono */}
             </button>
-            <nav className="flex flex-col space-y-6 mt-12">
-              <a href="/" className="text-white font-poppins hover:text-pink-300 text-lg">Inicio</a>
-              <a href="/agenda" className="text-white font-poppins hover:text-pink-300 text-lg">Agendar</a>
-              <a href="/servicios" className="text-white font-poppins hover:text-pink-300 text-lg">Servicios</a>
-              <a href="/cotizar" className="text-white font-poppins hover:text-pink-300 text-lg">Cotizar</a>
+            <nav className="flex flex-col space-y-6 mt-12 justify-items-start items-start">
+              <button onClick={()=>navigate("/")} className="text-white font-poppins hover:text-pink-300 text-lg">Inicio</button>
+              <button onClick={()=>navigate("/agenda")} className="text-white font-poppins hover:text-pink-300 text-lg">Agendar</button>
+              <button onClick={()=>navigate("/servicios")} className="text-white font-poppins hover:text-pink-300 text-lg">Servicios</button>
+              <button onClick={()=>navigate("/cotizar")} className="text-white font-poppins hover:text-pink-300 text-lg">Cotizar</button>
             </nav>
           </div>
         </div>
